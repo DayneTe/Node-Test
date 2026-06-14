@@ -5,6 +5,7 @@ type HelloResponse = { message: string };
 
 function App() {
   const [message, setMessage] = useState<HelloResponse | null>(null);
+  const [panelState, setOpen] = useState<boolean>(false);
 
   async function hello() {
     try {
@@ -22,7 +23,12 @@ function App() {
 
   return (
     <>
-      <div className="sidePanel">f</div>
+      <section className="sidePanel">
+        <div className={`${panelState ? "red" : "blue"}`}></div>
+        <button onClick={() => setOpen((prev) => !prev)}> <img src="favicon.svg" />
+        </button>
+      </section>
+      
 
       <section id="center">
         {message && <p>{message.message}</p>}

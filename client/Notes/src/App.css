@@ -44,9 +44,22 @@
 }
 
 .sidePanel {
+  display: flex;
   background-color: grey;
   height: 100vh;
   position: sticky;
   top: 0;
   width: 20%;
+}
+
+.red {
+  width: 10em;
+  height: 10em;
+  background-color: red;
+}
+
+.blue {
+  width: 10em;
+  height: 10em;
+  background-color: blue;
 }

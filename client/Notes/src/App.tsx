@@ -24,15 +24,21 @@ function App() {
   return (
     <>
 
-      <section className={`${panelState ? "sidePanel" : "displayOff"}`}>
-          <button className="openButton" onClick={() => setOpen((prev) => !prev)}>{"<"}</button>
+      <section className={`sidePanel ${panelState ? "sidePanel--open" : ""}`}>
+        <button
+          className="sidePanel__close"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          {"<"}
+        </button>
+
+        <div className="Note" />
+
       </section>
 
-      <div className={`${panelState ? "displayOff" : "openButton"}`}>
-        <button onClick={() => setOpen((prev) => !prev)}> {">"}</button>
+      <div className={`openButton ${panelState ? "openButton--hidden" : ""}`}>
+        <button onClick={() => setOpen((prev) => !prev)}>{">"}</button>
       </div>
-
-
 
       <section id="center">
         {message && <p>{message.message}</p>}

@@ -23,7 +23,6 @@ function App() {
 
   return (
     <>
-
       <section className={`sidePanel ${panelState ? "sidePanel--open" : ""}`}>
         <button
           className="sidePanel__close"
@@ -33,7 +32,10 @@ function App() {
         </button>
 
         <div className="Note" />
+        <div className="Note" />
+        <div className="Note" />
 
+        <div className="Note" />
       </section>
 
       <div className={`openButton ${panelState ? "openButton--hidden" : ""}`}>

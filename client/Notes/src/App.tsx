@@ -23,12 +23,16 @@ function App() {
 
   return (
     <>
-      <section className="sidePanel">
-        <div className={`${panelState ? "red" : "blue"}`}></div>
-        <button onClick={() => setOpen((prev) => !prev)}> <img src="favicon.svg" />
-        </button>
+
+      <section className={`${panelState ? "sidePanel" : "displayOff"}`}>
+          <button className="openButton" onClick={() => setOpen((prev) => !prev)}>{"<"}</button>
       </section>
-      
+
+      <div className={`${panelState ? "displayOff" : "openButton"}`}>
+        <button onClick={() => setOpen((prev) => !prev)}> {">"}</button>
+      </div>
+
+
 
       <section id="center">
         {message && <p>{message.message}</p>}

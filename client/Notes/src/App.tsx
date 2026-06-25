@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Editor from "./components/editor";
 
 type HelloResponse = { message: string };
 
@@ -45,7 +46,7 @@ function App() {
         {message && <p>{message.message}</p>}
         <button onClick={() => hello()}>Send Help</button>
 
-         <div className="TestNote" />
+         <div className="TestNote"><Editor /></div>
       </section>
     </>
   );

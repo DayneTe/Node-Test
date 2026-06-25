@@ -120,12 +120,13 @@
 
 .TestNote {
   position: absolute;
-  width: 30em;
-  height: 15em;
+  width: 40em;
+  height: auto;
   background-color: white;
   border: 3px black;
   margin-left: auto;
   margin-right: auto;
   top: 30%;
-  left: 20%
+  left: 20%;
+  overflow-y: auto;
 }

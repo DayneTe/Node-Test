@@ -1,10 +1,7 @@
 #center {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
+  height: 100%;
 
   @media (max-width: 1024px) {
     padding: 32px 20px 24px;
@@ -119,4 +116,16 @@
   border: 3px black;
   margin-left: auto;
   margin-right: auto;
+} 
+
+.TestNote {
+  position: absolute;
+  width: 30em;
+  height: 15em;
+  background-color: white;
+  border: 3px black;
+  margin-left: auto;
+  margin-right: auto;
+  top: 30%;
+  left: 20%
 }

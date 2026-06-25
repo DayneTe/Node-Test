@@ -34,7 +34,6 @@ function App() {
         <div className="Note" />
         <div className="Note" />
         <div className="Note" />
-
         <div className="Note" />
       </section>
 
@@ -45,6 +44,8 @@ function App() {
       <section id="center">
         {message && <p>{message.message}</p>}
         <button onClick={() => hello()}>Send Help</button>
+
+         <div className="TestNote" />
       </section>
     </>
   );

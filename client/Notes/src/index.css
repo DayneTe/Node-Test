@@ -1,7 +1,5 @@
 @import "tailwindcss";
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
   --bg: #fff;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -69,4 +67,39 @@ body {
   min-height: 100svh;
   height: 2000px;
   box-sizing: border-box;
+}
+
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* Heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
 }

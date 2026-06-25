@@ -46,7 +46,7 @@ function App() {
         {message && <p>{message.message}</p>}
         <button onClick={() => hello()}>Send Help</button>
 
-         <div className="TestNote"><Editor /></div>
+        <div className="TestNote"><Editor /></div>
       </section>
     </>
   );

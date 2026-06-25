@@ -1,13 +1,13 @@
 "use client"
-
 import { Tiptap, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { MenuBar } from './menuBar'
+import '../index.css'
 
 function Editor() {
     const editor = useEditor({
         extensions: [StarterKit],
-        content: '<p>Start Writing</p>',
+        content: '<p>...</p>',
     })
 
     if (!editor) return null

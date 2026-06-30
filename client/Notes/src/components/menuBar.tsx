@@ -1,8 +1,9 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
-import { BoldIcon, Heading1Icon, Heading2Icon, Heading3Icon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, UndoIcon } from 'lucide-react'
+import { BoldIcon, Heading1Icon, Heading2Icon, Heading3Icon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignStartIcon, UndoIcon } from 'lucide-react'
 import { menuBarStateSelector } from './menuBarState.tsx'
 import { Toggle } from '@base-ui/react/toggle'
+import { TaskList } from '@tiptap/extension-list'
 
 
 export const MenuBar = ({ editor }: { editor: Editor | null }) => {
@@ -75,6 +76,24 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     className={editorState.isTaskList ? 'is-active' : ''}
                 >
                     <ListCheckIcon />
+                </Toggle>
+                <Toggle
+                    onClick={() => editor.chain().focus().setTextAlign("left").run()}
+                    className={editorState.isAlignLeft ? 'is-active' : ''}
+                >
+                    <TextAlignStartIcon />
+                </Toggle>
+                <Toggle
+                    onClick={() => editor.chain().focus().toggleTextAlign("center").run()}
+                    className={editorState.isAlignCenter ? 'is-active' : ''}
+                >
+                    <TextAlignCenterIcon />
+                </Toggle>
+                <Toggle
+                    onClick={() => editor.chain().focus().toggleTextAlign("right").run()}
+                    className={editorState.isAlignRight ? 'is-active' : ''}
+                >
+                    <TextAlignEndIcon />
                 </Toggle>
                 <button onClick={() => editor.chain().focus().undo().run()} disabled={!editorState.canUndo}>
                     <UndoIcon />

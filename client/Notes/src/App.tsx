@@ -26,7 +26,7 @@ function App() {
     <>
       <section className={`sidePanel ${panelState ? "sidePanel--open" : ""}`}>
         <button
-          className="sidePanel__close"
+          className={`${panelState ? "sidePanelButton " :"sidePanelButton--hidden"} `}
           onClick={() => setOpen((prev) => !prev)}
         >
           {"<"}

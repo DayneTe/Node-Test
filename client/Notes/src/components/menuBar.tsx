@@ -3,8 +3,7 @@ import { useEditorState } from '@tiptap/react'
 import { BoldIcon, Heading1Icon, Heading2Icon, Heading3Icon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignStartIcon, UndoIcon } from 'lucide-react'
 import { menuBarStateSelector } from './menuBarState.tsx'
 import { Toggle } from '@base-ui/react/toggle'
-import { TaskList } from '@tiptap/extension-list'
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu.tsx'
 
 export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     const editorState = useEditorState({
@@ -26,6 +25,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 >
                     <BoldIcon />
                 </Toggle>
+
                 <Toggle
                     onClick={() => editor.chain().focus().toggleItalic().run()}
                     disabled={!editorState.canItalic}
@@ -40,61 +40,92 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 >
                     <StrikethroughIcon />
                 </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={editorState.isHeading1 ? 'is-active' : ''}
-                >
-                    <Heading1Icon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={editorState.isHeading2 ? 'is-active' : ''}
-                >
-                    <Heading2Icon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                    className={editorState.isHeading3 ? 'is-active' : ''}
-                >
-                    <Heading3Icon />
-                </Toggle>
 
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={editorState.isBulletList ? 'is-active' : ''}
-                >
-                    <ListIcon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    className={editorState.isOrderedList ? 'is-active' : ''}
-                >
-                    <ListOrderedIcon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleTaskList().run()}
-                    className={editorState.isTaskList ? 'is-active' : ''}
-                >
-                    <ListCheckIcon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().setTextAlign("left").run()}
-                    className={editorState.isAlignLeft ? 'is-active' : ''}
-                >
-                    <TextAlignStartIcon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleTextAlign("center").run()}
-                    className={editorState.isAlignCenter ? 'is-active' : ''}
-                >
-                    <TextAlignCenterIcon />
-                </Toggle>
-                <Toggle
-                    onClick={() => editor.chain().focus().toggleTextAlign("right").run()}
-                    className={editorState.isAlignRight ? 'is-active' : ''}
-                >
-                    <TextAlignEndIcon />
-                </Toggle>
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <button><Heading1Icon /></button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+
+                        <DropdownMenuItem className="text-black flex items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() =>
+                                editor.chain().focus().toggleHeading({ level: 1 }).run()
+                            }
+                        >
+                            <Heading1Icon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() =>
+                                editor.chain().focus().toggleHeading({ level: 2 }).run()
+                            }
+                        >
+                            <Heading2Icon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() =>
+                                editor.chain().focus().toggleHeading({ level: 3 }).run()
+                            }
+                        >
+                            <Heading3Icon />
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <button><ListIcon /></button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        >
+                            <ListIcon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        >
+                            <ListOrderedIcon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().toggleTaskList().run()}
+                        >
+                            <ListCheckIcon />
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <button><TextAlignStartIcon /></button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+                        >
+                            <TextAlignStartIcon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+                        >
+                            <TextAlignCenterIcon />
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem className="text-black flex h-8 w-8 items-center justify-center rounded hover:bg-gray-100"
+                            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+                        >
+                            <TextAlignEndIcon />
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                 <button onClick={() => editor.chain().focus().undo().run()} disabled={!editorState.canUndo}>
                     <UndoIcon />
                 </button>

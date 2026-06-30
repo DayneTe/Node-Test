@@ -4,10 +4,12 @@ import StarterKit from '@tiptap/starter-kit'
 import TextAlign from "@tiptap/extension-text-align"
 import { MenuBar } from './menuBar'
 import '../index.css'
+import { ListKit} from '@tiptap/extension-list'
 
 function Editor() {
     const editor = useEditor({
         extensions: [
+            ListKit,
             StarterKit.configure({
                 bulletList: {
                     HTMLAttributes: {
@@ -23,7 +25,8 @@ function Editor() {
             }),
             TextAlign.configure({
                 types: ["heading", "paragraph"]
-            })
+            }),
+            
         ],
         content: '<p>...</p>',
         editorProps: {

@@ -26,9 +26,10 @@ export function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
     isOrderedList: ctx.editor.isActive('orderedList') ?? false,
     isTaskList: ctx.editor.isActive('taskList') ?? false,
     // Text Align
-    isAlignLeft: ctx.editor.isActive('AlignLeft') ?? false,
-    isAlignRight: ctx.editor.isActive('AlignRight') ?? false,
-    isAlignCenter: ctx.editor.isActive('AlignCenter') ?? false,
+    isAlignLeft: ctx.editor.isActive({textAlign: "left"}) ?? false,
+    isAlignRight: ctx.editor.isActive({textAlign: "right"}) ?? false,
+    isAlignCenter: ctx.editor.isActive({textAlign: "center"}) ?? false,
+    isAlignJustify: ctx.editor.isActive({ textAlign: "justify" }) ?? false,
 
     // History
     canUndo: ctx.editor.can().chain().undo().run() ?? false,

@@ -1,5 +1,5 @@
-@import './styles/_variables.scss';
-@import './styles/_keyframe-animations.scss';
+@import "./styles/_variables.scss";
+@import "./styles/_keyframe-animations.scss";
 
 @import "tailwindcss";
 :root {
@@ -129,5 +129,32 @@ ul[data-type="taskList"] {
 
   input[type="checkbox"] {
     cursor: pointer;
+  }
+}
+
+.toggleButton {
+  padding: 0.55em;
+  border-radius: 1em;
+
+  &:hover {
+    background-color: rgb(187, 187, 187);
+  }
+}
+
+.is-active {
+  background-color: rgb(187, 187, 187);
+}
+
+.dropdownButton {
+  color: black;
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+
+  &:hover {
+    background-color: rgb(229, 231, 235);
   }
 }

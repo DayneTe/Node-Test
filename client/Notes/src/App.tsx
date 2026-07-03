@@ -2,38 +2,24 @@
 import { useState } from "react";
 import "./App.css";
 import Editor from "./components/editor";
-
-type HelloResponse = { message: string };
+import Moveable from 'react-moveable'
+import React from "react";
 
 function App() {
-  const [message, setMessage] = useState<HelloResponse | null>(null);
   const [panelState, setOpen] = useState<boolean>(false);
   const [post, setPost] = useState("");
+  const targetRef = React.useRef<HTMLDivElement>(null);
 
   const onChange = (content: string) => {
     setPost(content)
     console.log(content)
   }
 
-  async function hello() {
-    try {
-      const response = await fetch("http://localhost:3000/api/hello");
-      if (!response.ok) {
-        throw new Error(`HTTP Error: , ${response.status}`);
-      }
-      const data = await response.json();
-      setMessage(data);
-      console.log(data);
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  }
-
   return (
     <>
       <section className={`sidePanel ${panelState ? "sidePanel--open" : ""}`}>
         <button
-          className={`${panelState ? "sidePanelButton " :"sidePanelButton--hidden"} `}
+          className={`${panelState ? "sidePanelButton " : "sidePanelButton--hidden"} `}
           onClick={() => setOpen((prev) => !prev)}
         >
           {"<"}
@@ -50,10 +36,27 @@ function App() {
       </div>
 
       <section id="center">
-        {message && <p>{message.message}</p>}
-        <button onClick={() => hello()}>Send Help</button>
 
-        <div className="TestNote"><Editor content={post} onChange={onChange}/></div>
+        <div className="TestNote" ref={targetRef}><Editor content={post} onChange={onChange} /></div>
+        <Moveable
+          target={targetRef}
+          origin={false}
+          draggable={true}
+          resizable={true}
+          throttleDrag={1}
+          edgeDraggable={true}
+          startDragRotate={0}
+          throttleDragRotate={0}
+          onResize={e => {
+            e.target.style.width = `${e.width}px`
+            e.target.style.height = `${e.height}px`
+            e.target.style.transform = `${e.drag.transform}px`
+          }}
+          onDrag={e => {
+            e.target.style.transform = e.transform;
+          }}
+        />
+
       </section>
     </>
   );

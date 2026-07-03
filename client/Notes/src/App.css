@@ -135,9 +135,9 @@
 .TestNote {
   color: black;
   position: absolute;
-  width: 33em;
-  height: auto;
   min-height: 10em;
+  min-width: 360px;
+  height: auto;
   background-color: white;
   border: 2px solid gray;
   border-radius: 0.5em;
@@ -145,7 +145,7 @@
   margin-right: auto;
   top: 30%;
   left: 20%;
-  overflow-y: auto;
+  overflow-y: hidden;
 } 
 
 /* @theme inline {

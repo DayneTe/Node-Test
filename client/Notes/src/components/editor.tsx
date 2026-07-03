@@ -4,9 +4,14 @@ import StarterKit from '@tiptap/starter-kit'
 import TextAlign from "@tiptap/extension-text-align"
 import { MenuBar } from './menuBar'
 import '../index.css'
-import { ListKit} from '@tiptap/extension-list'
+import { ListKit } from '@tiptap/extension-list'
 
-function Editor() {
+interface EditorProps {
+    content: string;
+    onChange: (content:string) => void
+}
+
+function Editor({ content, onChange }: EditorProps) {
     const editor = useEditor({
         extensions: [
             ListKit,
@@ -21,20 +26,23 @@ function Editor() {
                         class: "list-decimal ml-4"
                     }
                 }
-                
+
             }),
             TextAlign.configure({
                 types: ["heading", "paragraph"]
             }),
-            
+
         ],
-        content: '<p>...</p>',
+        content: content,
         editorProps: {
             attributes: {
                 class: "p-2"
             }
+        },
+        onUpdate: ({ editor }) => {
+            onChange(editor.getHTML())
         }
-    })
+    });
 
     if (!editor) return null
 

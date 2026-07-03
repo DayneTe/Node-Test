@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import "./App.css";
 import Editor from "./components/editor";
@@ -7,6 +8,12 @@ type HelloResponse = { message: string };
 function App() {
   const [message, setMessage] = useState<HelloResponse | null>(null);
   const [panelState, setOpen] = useState<boolean>(false);
+  const [post, setPost] = useState("");
+
+  const onChange = (content: string) => {
+    setPost(content)
+    console.log(content)
+  }
 
   async function hello() {
     try {
@@ -46,7 +53,7 @@ function App() {
         {message && <p>{message.message}</p>}
         <button onClick={() => hello()}>Send Help</button>
 
-        <div className="TestNote"><Editor /></div>
+        <div className="TestNote"><Editor content={post} onChange={onChange}/></div>
       </section>
     </>
   );

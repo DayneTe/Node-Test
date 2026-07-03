@@ -5,7 +5,32 @@ import type { EditorStateSnapshot } from '@tiptap/react'
  * State selector for the MenuBar component.
  * Extracts the relevant editor state for rendering menu buttons.
  */
-export function menuBarStateSelector(ctx: EditorStateSnapshot<Editor>) {
+export function menuBarStateSelector(ctx: EditorStateSnapshot<Editor | null>,
+) {
+  if (!ctx.editor) {
+    return {
+      isBold: false,
+      canBold: false,
+      isItalic: false,
+      canItalic: false,
+      isStrike: false,
+      canStrike: false,
+      canClearMarks: false,
+      isParagraph: false,
+      isHeading1: false,
+      isHeading2: false,
+      isHeading3: false,
+      isBulletList: false,
+      isOrderedList: false,
+      isTaskList: false,
+      isAlignLeft: false,
+      isAlignRight: false,
+      isAlignCenter: false,
+      isAlignJustify: false,
+      canUndo: false,
+      canRedo: false,
+    };
+  }
   return {
     // Text formatting
     isBold: ctx.editor.isActive('bold') ?? false,

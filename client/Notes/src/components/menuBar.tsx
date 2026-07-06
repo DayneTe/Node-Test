@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
-import { BoldIcon, Heading1Icon, Heading2Icon, Heading3Icon, HeadingIcon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignJustifyIcon, TextAlignStartIcon, UndoIcon } from 'lucide-react'
+import { BoldIcon, EllipsisIcon, Heading1Icon, Heading2Icon, Heading3Icon, HeadingIcon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignJustifyIcon, TextAlignStartIcon, UndoIcon } from 'lucide-react'
 import { menuBarStateSelector } from './menuBarState.tsx'
 import { Toggle } from '@base-ui/react/toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu.tsx'
@@ -16,7 +16,9 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     }
 
     return (
-        <div className="pt-1 pb-1 bg-gray-200">
+        <>
+        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center'><EllipsisIcon className='w-4'/></div>
+        <div className="py-1 bg-gray-200">
             <div className='flex justify-evenly'>
                 <Toggle
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -46,7 +48,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                         <button className="toggleButton"><HeadingIcon /></button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg bg-white">
 
                         <DropdownMenuItem className={`dropdownButton ${editorState.isHeading1 ? 'is-active' : ''}`}
                             onClick={() =>
@@ -79,7 +81,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                         <button className="toggleButton"><ListIcon /></button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg bg-white">
                         <DropdownMenuItem className={`dropdownButton ${editorState.isBulletList ? 'is-active' : ''}`}
                             onClick={() => editor.chain().focus().toggleBulletList().run()}
                         >
@@ -105,7 +107,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                         <button className="toggleButton"><TextAlignStartIcon /></button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg">
+                    <DropdownMenuContent className="flex flex-row gap-3 w-auto shadow-lg bg-white">
                         <DropdownMenuItem className={`dropdownButton ${editorState.isAlignLeft ? 'is-active' : ''}`}
                             onClick={() => editor.chain().focus().setTextAlign("left").run()}
                         >
@@ -144,5 +146,6 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 </button>
             </div>
         </div>
+        </>
     )
 }

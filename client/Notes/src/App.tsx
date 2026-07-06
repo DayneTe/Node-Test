@@ -40,9 +40,11 @@ function App() {
         <div className="TestNote" ref={targetRef}><Editor content={post} onChange={onChange} /></div>
         <Moveable
           target={targetRef}
+          dragTarget={'.drag_area'}
           origin={false}
           draggable={true}
           resizable={true}
+          hideDefaultLines={true}
           throttleDrag={1}
           edgeDraggable={true}
           startDragRotate={0}

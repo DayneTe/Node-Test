@@ -17,7 +17,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
     return (
         <>
-        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center'><EllipsisIcon className='w-4'/></div>
+        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center rounded-t-md'><EllipsisIcon className='w-4'/></div>
         <div className="py-1 bg-gray-200">
             <div className='flex justify-evenly'>
                 <Toggle

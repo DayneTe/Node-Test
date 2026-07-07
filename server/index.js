@@ -11,6 +11,32 @@ const DB_NAME = process.env.DB_NAME || "notes_app";
 
 let db;
 
+const DEFAULT_NOTE = {
+  x: 100,
+  y: 100,
+  width: 360,
+  height: 200,
+};
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+const safeNumber = (value, fallback, min, max) => {
+  const numberValue = Number(value);
+
+  if (!Number.isFinite(numberValue)) return fallback;
+
+  return clamp(Math.round(numberValue), min, max);
+};
+
+const sanitizeNote = (note) => ({
+  ...note,
+  x: safeNumber(note.x, DEFAULT_NOTE.x, -2000, 5000),
+  y: safeNumber(note.y, DEFAULT_NOTE.y, -2000, 5000),
+  width: safeNumber(note.width, DEFAULT_NOTE.width, 360, 1600),
+  height: safeNumber(note.height, DEFAULT_NOTE.height, 160, 1200),
+  content: typeof note.content === "string" ? note.content : "",
+});
+
 app.use(
   cors({
     origin: ["http://localhost:5173"],
@@ -51,6 +77,18 @@ async function setupDatabase() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
   `);
+
+  await db.query(
+    `
+    UPDATE notes
+    SET
+      x = CASE WHEN x < -2000 OR x > 5000 THEN ? ELSE x END,
+      y = CASE WHEN y < -2000 OR y > 5000 THEN ? ELSE y END,
+      width = CASE WHEN width < 360 OR width > 1600 THEN ? ELSE width END,
+      height = CASE WHEN height < 160 OR height > 1200 THEN ? ELSE height END
+    `,
+    [DEFAULT_NOTE.x, DEFAULT_NOTE.y, DEFAULT_NOTE.width, DEFAULT_NOTE.height],
+  );
 }
 
 //Route
@@ -69,11 +107,11 @@ app.get("/api/notes", async (req, res) => {
     ORDER BY created_at ASC
   `);
 
-  res.json(notes);
+  res.json(notes.map(sanitizeNote));
 });
 
 app.post("/api/notes", async (req, res) => {
-  const { id, x, y, width, height, content } = req.body;
+  const { id, x, y, width, height, content } = sanitizeNote(req.body);
 
   await db.query(
     `
@@ -88,7 +126,7 @@ app.post("/api/notes", async (req, res) => {
 
 app.put("/api/notes/:id", async (req, res) => {
   const { id } = req.params;
-  const { x, y, width, height, content } = req.body;
+  const { x, y, width, height, content } = sanitizeNote(req.body);
 
   await db.query(
     `

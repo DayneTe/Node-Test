@@ -12,11 +12,45 @@ interface NoteData {
     content: string;
 }
 
+const clamp = (value: number, min: number, max: number) =>
+    Math.min(Math.max(value, min), max);
+
+const MIN_WIDTH = 360;
+const MIN_HEIGHT = 160;
+
+const safeNumber = (value: number, fallback: number, min: number, max: number) => {
+    if (!Number.isFinite(value)) return fallback;
+    return clamp(Math.round(value), min, max);
+};
+
 function Note({ note, onUpdate }: {
     note: NoteData;
     onUpdate: (note: NoteData) => void;
 }) {
     const targetRef = React.useRef<HTMLDivElement>(null);
+    const latestNoteRef = React.useRef(note);
+    const pendingNoteRef = React.useRef<NoteData | null>(null);
+
+    React.useEffect(() => {
+        latestNoteRef.current = note;
+    }, [note]);
+
+    const paintNote = (nextNote: NoteData, transform: string) => {
+        const target = targetRef.current;
+
+        if (!target) return;
+
+        target.style.width = `${nextNote.width}px`;
+        target.style.height = `${nextNote.height}px`;
+        target.style.transform = transform;
+    };
+
+    const commitPendingNote = () => {
+        if (!pendingNoteRef.current) return;
+
+        onUpdate(pendingNoteRef.current);
+        pendingNoteRef.current = null;
+    };
 
     return (
         <>
@@ -44,22 +78,42 @@ function Note({ note, onUpdate }: {
                 throttleDrag={1}
                 startDragRotate={0}
                 throttleDragRotate={0}
+                onResizeStart={({ set, dragStart }) => {
+                    set([note.width, note.height]);
+
+                    if (dragStart) {
+                        dragStart.set([note.x, note.y]);
+                    }
+                }}
                 onResize={({ width, height, drag }) => {
-                    onUpdate({
-                        ...note,
-                        width,
-                        height,
-                        x: drag.beforeTranslate[0],
-                        y: drag.beforeTranslate[1]
-                    });
+                    const currentNote = latestNoteRef.current;
+                    const nextNote = {
+                        ...currentNote,
+                        width: safeNumber(width, currentNote.width, MIN_WIDTH, 1600),
+                        height: safeNumber(height, currentNote.height, MIN_HEIGHT, 1200),
+                        x: safeNumber(drag.beforeTranslate[0], currentNote.x, -2000, 5000),
+                        y: safeNumber(drag.beforeTranslate[1], currentNote.y, -2000, 5000)
+                    };
+
+                    pendingNoteRef.current = nextNote;
+                    paintNote(nextNote, drag.transform);
                 }}
-                onDrag={({ beforeTranslate }) => {
-                    onUpdate({
-                        ...note,
-                        x: beforeTranslate[0],
-                        y: beforeTranslate[1]
-                    });
+                onResizeEnd={commitPendingNote}
+                onDragStart={({ set }) => {
+                    set([note.x, note.y]);
                 }}
+                onDrag={({ beforeTranslate, transform }) => {
+                    const currentNote = latestNoteRef.current;
+                    const nextNote = {
+                        ...currentNote,
+                        x: safeNumber(beforeTranslate[0], currentNote.x, -2000, 5000),
+                        y: safeNumber(beforeTranslate[1], currentNote.y, -2000, 5000)
+                    };
+
+                    pendingNoteRef.current = nextNote;
+                    paintNote(nextNote, transform);
+                }}
+                onDragEnd={commitPendingNote}
             />
         </>
     )

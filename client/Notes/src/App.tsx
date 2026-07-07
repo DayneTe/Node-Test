@@ -12,6 +12,24 @@ interface NoteData {
     content: string;
 }
 
+const DEFAULT_NOTE = {
+  x: 100,
+  y: 100,
+  width: 360,
+  height: 200,
+};
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
+
+const sanitizeNote = (note: NoteData): NoteData => ({
+  ...note,
+  x: Number.isFinite(note.x) ? clamp(Math.round(note.x), -2000, 5000) : DEFAULT_NOTE.x,
+  y: Number.isFinite(note.y) ? clamp(Math.round(note.y), -2000, 5000) : DEFAULT_NOTE.y,
+  width: Number.isFinite(note.width) ? clamp(Math.round(note.width), 360, 1600) : DEFAULT_NOTE.width,
+  height: Number.isFinite(note.height) ? clamp(Math.round(note.height), 160, 1200) : DEFAULT_NOTE.height,
+});
+
 function App() {
   const [panelState, setOpen] = useState<boolean>(false);
   const [notes, setNotes] = useState<NoteData[]>([]);
@@ -20,7 +38,7 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:3000/api/notes")
       .then((response) => response.json())
-      .then((savedNotes: NoteData[]) => setNotes(savedNotes))
+      .then((savedNotes: NoteData[]) => setNotes(savedNotes.map(sanitizeNote)))
       .catch((error) => console.error("Unable to load notes:", error));
   }, []);
 
@@ -31,15 +49,17 @@ function App() {
   }, []);
 
   const saveNote = (note: NoteData) => {
-    window.clearTimeout(saveTimers.current[note.id]);
+    const safeNote = sanitizeNote(note);
 
-    saveTimers.current[note.id] = window.setTimeout(() => {
-      fetch(`http://localhost:3000/api/notes/${note.id}`, {
+    window.clearTimeout(saveTimers.current[safeNote.id]);
+
+    saveTimers.current[safeNote.id] = window.setTimeout(() => {
+      fetch(`http://localhost:3000/api/notes/${safeNote.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(note),
+        body: JSON.stringify(safeNote),
       }).catch((error) => console.error("Unable to save note:", error));
     }, 300);
   };
@@ -47,10 +67,7 @@ function App() {
   const createNote = () => {
     const newNote: NoteData = {
         id: crypto.randomUUID(),
-        x: 100,
-        y: 100,
-        width: 300,
-        height: 200,
+        ...DEFAULT_NOTE,
         content: "",
     };
 
@@ -89,10 +106,11 @@ function App() {
             note={note}
             onUpdate={(updated) =>
               {
+                const safeNote = sanitizeNote(updated);
                 setNotes(notes =>
-                  notes.map(n => n.id === updated.id ? updated : n)
+                  notes.map(n => n.id === safeNote.id ? safeNote : n)
                 );
-                saveNote(updated);
+                saveNote(safeNote);
               }
             }
           />

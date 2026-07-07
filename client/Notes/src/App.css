@@ -123,13 +123,17 @@
   }
 }
 
-.Note {
+.NoteButton {
+  cursor: pointer;
   width: 5em;
   height: 5em;
   background-color: white;
   border: 3px black;
   margin-left: auto;
   margin-right: auto;
+  &:hover {
+    background-color: rgb(219, 219, 219);
+  }
 } 
 
 .TestNote {
@@ -143,8 +147,6 @@
   border-radius: 0.5em;
   margin-left: auto;
   margin-right: auto;
-  top: 30%;
-  left: 20%;
   overflow-y: hidden;
 } 
 

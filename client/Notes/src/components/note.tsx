@@ -29,6 +29,7 @@ function Note({ note, onUpdate, onDelete }: {
     onDelete: (id: string) => void;
 }) {
     const targetRef = React.useRef<HTMLDivElement>(null);
+    const [dragHandle, setDragHandle] = React.useState<HTMLDivElement | null>(null);
     const latestNoteRef = React.useRef(note);
     const pendingNoteRef = React.useRef<NoteData | null>(null);
 
@@ -67,13 +68,14 @@ function Note({ note, onUpdate, onDelete }: {
                     content={note.content}
                     onChange={(content) => onUpdate({ ...note, content })}
                     onDelete={() => onDelete(note.id)}
+                    onDragHandleReady={setDragHandle}
                 />
 
             </div>
 
             <Moveable
                 target={targetRef}
-                dragTarget={'.drag_area'}
+                dragTarget={dragHandle}
                 origin={false}
                 draggable={true}
                 resizable={true}

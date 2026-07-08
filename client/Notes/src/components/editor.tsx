@@ -10,9 +10,10 @@ interface EditorProps {
     content: string;
     onChange: (content:string) => void
     onDelete: () => void
+    onDragHandleReady: (element: HTMLDivElement | null) => void
 }
 
-function Editor({ content, onChange, onDelete }: EditorProps) {
+function Editor({ content, onChange, onDelete, onDragHandleReady }: EditorProps) {
     const editor = useEditor({
         extensions: [
             ListKit,
@@ -49,7 +50,11 @@ function Editor({ content, onChange, onDelete }: EditorProps) {
 
     return (
         <Tiptap editor={editor}>
-            <MenuBar editor={editor} onDelete={onDelete} />
+            <MenuBar
+                editor={editor}
+                onDelete={onDelete}
+                onDragHandleReady={onDragHandleReady}
+            />
             <Tiptap.Content />
         </Tiptap>
     )

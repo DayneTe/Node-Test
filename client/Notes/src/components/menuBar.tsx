@@ -5,7 +5,15 @@ import { menuBarStateSelector } from './menuBarState.tsx'
 import { Toggle } from '@base-ui/react/toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu.tsx'
 
-export const MenuBar = ({ editor, onDelete }: { editor: Editor | null; onDelete: () => void }) => {
+export const MenuBar = ({
+    editor,
+    onDelete,
+    onDragHandleReady,
+}: {
+    editor: Editor | null;
+    onDelete: () => void;
+    onDragHandleReady: (element: HTMLDivElement | null) => void;
+}) => {
     const editorState = useEditorState({
         editor,
         selector: menuBarStateSelector,
@@ -17,7 +25,10 @@ export const MenuBar = ({ editor, onDelete }: { editor: Editor | null; onDelete:
 
     return (
         <>
-        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center rounded-t-md relative'>
+        <div
+            ref={onDragHandleReady}
+            className='drag_area bg-gray-200 h-3 w-full flex justify-center rounded-t-md relative'
+        >
             <EllipsisIcon className='w-4 mx-auto absolute left-1/2'/>
             <button
                 aria-label="Delete note"

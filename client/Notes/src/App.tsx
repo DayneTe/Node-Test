@@ -43,8 +43,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const timers = saveTimers.current;
+
     return () => {
-      Object.values(saveTimers.current).forEach(window.clearTimeout);
+      Object.values(timers).forEach(window.clearTimeout);
     };
   }, []);
 
@@ -81,6 +83,17 @@ function App() {
     }).catch((error) => console.error("Unable to create note:", error));
 };
 
+  const deleteNote = (id: string) => {
+    window.clearTimeout(saveTimers.current[id]);
+    delete saveTimers.current[id];
+
+    setNotes(notes => notes.filter(note => note.id !== id));
+
+    fetch(`http://localhost:3000/api/notes/${id}`, {
+      method: "DELETE",
+    }).catch((error) => console.error("Unable to delete note:", error));
+  };
+
   return (
     <>
       <section className={`sidePanel ${panelState ? "sidePanel--open" : ""}`}>
@@ -113,6 +126,7 @@ function App() {
                 saveNote(safeNote);
               }
             }
+            onDelete={deleteNote}
           />
         ))}
 

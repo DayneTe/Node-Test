@@ -9,9 +9,10 @@ import { ListKit } from '@tiptap/extension-list'
 interface EditorProps {
     content: string;
     onChange: (content:string) => void
+    onDelete: () => void
 }
 
-function Editor({ content, onChange }: EditorProps) {
+function Editor({ content, onChange, onDelete }: EditorProps) {
     const editor = useEditor({
         extensions: [
             ListKit,
@@ -48,7 +49,7 @@ function Editor({ content, onChange }: EditorProps) {
 
     return (
         <Tiptap editor={editor}>
-            <MenuBar editor={editor} />
+            <MenuBar editor={editor} onDelete={onDelete} />
             <Tiptap.Content />
         </Tiptap>
     )

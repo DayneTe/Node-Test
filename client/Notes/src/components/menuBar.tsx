@@ -1,11 +1,11 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
-import { BoldIcon, EllipsisIcon, Heading1Icon, Heading2Icon, Heading3Icon, HeadingIcon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignJustifyIcon, TextAlignStartIcon, UndoIcon } from 'lucide-react'
+import { BoldIcon, EllipsisIcon, Heading1Icon, Heading2Icon, Heading3Icon, HeadingIcon, ItalicIcon, ListCheckIcon, ListIcon, ListOrderedIcon, RedoIcon, StrikethroughIcon, TextAlignCenterIcon, TextAlignEndIcon, TextAlignJustifyIcon, TextAlignStartIcon, TrashIcon, UndoIcon } from 'lucide-react'
 import { menuBarStateSelector } from './menuBarState.tsx'
 import { Toggle } from '@base-ui/react/toggle'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu.tsx'
 
-export const MenuBar = ({ editor }: { editor: Editor | null }) => {
+export const MenuBar = ({ editor, onDelete }: { editor: Editor | null; onDelete: () => void }) => {
     const editorState = useEditorState({
         editor,
         selector: menuBarStateSelector,
@@ -17,7 +17,18 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
     return (
         <>
-        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center rounded-t-md'><EllipsisIcon className='w-4'/></div>
+        <div className='drag_area bg-gray-200 h-3 w-full flex justify-center rounded-t-md relative'>
+            <EllipsisIcon className='w-4 mx-auto absolute left-1/2'/>
+            <button
+                aria-label="Delete note"
+                title="Delete note"
+                className="ml-auto cursor-pointer"
+                onClick={onDelete}
+                onPointerDown={(event) => event.stopPropagation()}
+            >
+                <TrashIcon className='w-4' />
+            </button>
+            </div>
         <div className="py-1 bg-gray-200">
             <div className='flex justify-evenly'>
                 <Toggle

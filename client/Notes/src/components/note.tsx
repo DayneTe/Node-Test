@@ -23,9 +23,10 @@ const safeNumber = (value: number, fallback: number, min: number, max: number) =
     return clamp(Math.round(value), min, max);
 };
 
-function Note({ note, onUpdate }: {
+function Note({ note, onUpdate, onDelete }: {
     note: NoteData;
     onUpdate: (note: NoteData) => void;
+    onDelete: (id: string) => void;
 }) {
     const targetRef = React.useRef<HTMLDivElement>(null);
     const latestNoteRef = React.useRef(note);
@@ -62,7 +63,11 @@ function Note({ note, onUpdate }: {
                 }}
                 ref={targetRef}>
 
-                <Editor content={note.content} onChange={(content) => onUpdate({ ...note, content })} />
+                <Editor
+                    content={note.content}
+                    onChange={(content) => onUpdate({ ...note, content })}
+                    onDelete={() => onDelete(note.id)}
+                />
 
             </div>
 

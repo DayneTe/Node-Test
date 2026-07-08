@@ -140,6 +140,14 @@ app.put("/api/notes/:id", async (req, res) => {
   res.json({ success: true });
 });
 
+app.delete("/api/notes/:id", async (req, res) => {
+  const { id } = req.params;
+
+  await db.query("DELETE FROM notes WHERE id=?", [id]);
+
+  res.json({ success: true });
+});
+
 setupDatabase()
   .then(() => {
     app.listen(PORT, () => {

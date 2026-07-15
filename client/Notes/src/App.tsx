@@ -104,6 +104,7 @@ function App() {
           {"<"}
         </button>
 
+        <h2 className="mx-auto text-white text-3xl">Add Note</h2>
         <button onClick={createNote}><div className="NoteButton" /></button>
       </section>
 

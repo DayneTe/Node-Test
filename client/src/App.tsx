@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Note from "./components/note";
-const API_URL = import.meta.env.API_URL
+const API_URL = import.meta.env.VITE_API_URL
 
 interface NoteData {
     id: string;
@@ -57,7 +57,7 @@ function App() {
     window.clearTimeout(saveTimers.current[safeNote.id]);
 
     saveTimers.current[safeNote.id] = window.setTimeout(() => {
-      fetch(`${API_URL}/${safeNote.id}`, {
+      fetch(`${API_URL}/api/notes${safeNote.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

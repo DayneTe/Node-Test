@@ -57,7 +57,7 @@ function App() {
     window.clearTimeout(saveTimers.current[safeNote.id]);
 
     saveTimers.current[safeNote.id] = window.setTimeout(() => {
-      fetch(`${API_URL}/api/notes${safeNote.id}`, {
+      fetch(`${API_URL}/api/notes/${safeNote.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,13 +1,15 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2/promise");
 
 const app = express();
 const PORT = 3000;
-const DB_HOST = process.env.DB_HOST || "localhost";
-const DB_USER = process.env.DB_USER || "root";
-const DB_PASSWORD = process.env.DB_PASSWORD || "password";
-const DB_NAME = process.env.DB_NAME || "notes_app";
+const DB_HOST = process.env.DB_HOST;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME;
 
 let db;
 

@@ -48,7 +48,9 @@ const sanitizeNote = (note) => ({
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173",
+      "https://notes-4iae.onrender.com",
+    ],
   }),
 );
 app.use(express.json());

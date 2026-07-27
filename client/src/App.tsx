@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Note from "./components/note";
+const API_URL = import.meta.env.API_URL
 
 interface NoteData {
     id: string;
@@ -36,7 +37,7 @@ function App() {
   const saveTimers = useRef<Record<string, number>>({});
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/notes")
+    fetch(`${API_URL}/api/notes`)
       .then((response) => response.json())
       .then((savedNotes: NoteData[]) => setNotes(savedNotes.map(sanitizeNote)))
       .catch((error) => console.error("Unable to load notes:", error));
@@ -56,7 +57,7 @@ function App() {
     window.clearTimeout(saveTimers.current[safeNote.id]);
 
     saveTimers.current[safeNote.id] = window.setTimeout(() => {
-      fetch(`http://localhost:3000/api/notes/${safeNote.id}`, {
+      fetch(`${API_URL}/${safeNote.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,7 @@ function App() {
     };
 
     setNotes(prev => [...prev, newNote]);
-    fetch("http://localhost:3000/api/notes", {
+    fetch(`${API_URL}/api/notes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +90,7 @@ function App() {
 
     setNotes(notes => notes.filter(note => note.id !== id));
 
-    fetch(`http://localhost:3000/api/notes/${id}`, {
+    fetch(`${API_URL}/api/notes/${id}`, {
       method: "DELETE",
     }).catch((error) => console.error("Unable to delete note:", error));
   };

@@ -58,6 +58,8 @@ async function setupDatabase() {
     host: DB_HOST,
     user: DB_USER,
     password: DB_PASSWORD,
+    port: Number(process.env.DB_PORT),
+    database: DB_NAME
   });
 
   await setupConnection.query(
@@ -70,6 +72,7 @@ async function setupDatabase() {
     user: DB_USER,
     password: DB_PASSWORD,
     database: DB_NAME,
+    port: Number(process.env.DB_PORT),
     waitForConnections: true,
     connectionLimit: 10,
   });

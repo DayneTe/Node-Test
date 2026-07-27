@@ -5,7 +5,7 @@ const cors = require("cors");
 const mysql = require("mysql2/promise");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;

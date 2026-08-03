@@ -59,7 +59,7 @@ async function authenticate(req, res, next) {
   const token = authHeader.substring(7);
 
   try {
-    req.user = await admin.auth().verifyIdToken(token);
+    req.user = await getAuth().verifyIdToken(token);
     next();
   } catch (err) {
     console.error(err);

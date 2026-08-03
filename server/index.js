@@ -15,7 +15,7 @@ console.log({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
 });
 
 let db;
@@ -48,9 +48,7 @@ const sanitizeNote = (note) => ({
 
 app.use(
   cors({
-    origin: ["http://localhost:5173",
-      "https://notes-4iae.onrender.com",
-    ],
+    origin: ["http://localhost:5173", "https://notes-4iae.onrender.com"],
   }),
 );
 app.use(express.json());
@@ -61,7 +59,7 @@ async function setupDatabase() {
     user: DB_USER,
     password: DB_PASSWORD,
     port: Number(process.env.DB_PORT),
-    database: DB_NAME
+    database: DB_NAME,
   });
 
   await setupConnection.query(
@@ -82,6 +80,7 @@ async function setupDatabase() {
   await db.query(`
     CREATE TABLE IF NOT EXISTS notes (
       id VARCHAR(36) PRIMARY KEY,
+      user_id VARCHAR(128) NOT NULL,
       x INT NOT NULL DEFAULT 100,
       y INT NOT NULL DEFAULT 100,
       width INT NOT NULL DEFAULT 300,

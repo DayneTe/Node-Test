@@ -1,8 +1,9 @@
 require("dotenv").config();
-const admin = require("firebase-admin");
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
 
-admin.initializeApp({
-  credential: admin.credential.cert({
+initializeApp({
+  credential: cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
@@ -55,7 +56,7 @@ async function authenticate(req, res, next) {
     return res.status(401).json({ error: "Missing token" });
   }
 
-  const token = authHeader.subtring(7);
+  const token = authHeader.substring(7);
 
   try {
     req.user = await admin.auth().verifyIdToken(token);
@@ -143,7 +144,7 @@ app.get("/api/notes", authenticate, async (req, res) => {
   res.json(notes.map(sanitizeNote));
 });
 
-app.post("/api/notes", async (req, res) => {
+app.post("/api/notes", authenticate, async (req, res) => {
   const { id, x, y, width, height, content } = sanitizeNote(req.body);
 
   await db.query(

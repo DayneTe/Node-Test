@@ -1,4 +1,14 @@
 require("dotenv").config();
+const admin = require("firebase-admin");
+const serviceAccount = require("./FbServiceAcc.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  }),
+});
 
 const express = require("express");
 const cors = require("cors");
@@ -10,13 +20,6 @@ const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
-
-console.log({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-});
 
 let db;
 
@@ -45,6 +48,24 @@ const sanitizeNote = (note) => ({
   height: safeNumber(note.height, DEFAULT_NOTE.height, 160, 1200),
   content: typeof note.content === "string" ? note.content : "",
 });
+
+async function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Missing token" });
+  }
+
+  const token = authHeader.subtring(7);
+
+  try {
+    req.user = await admin.auth().verifyIdToken(token);
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
 
 app.use(
   cors({
@@ -109,16 +130,16 @@ app.get("/", (req, res) => {
   res.send("wecole");
 });
 
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "hello" });
-});
-
-app.get("/api/notes", async (req, res) => {
-  const [notes] = await db.query(`
+app.get("/api/notes", authenticate, async (req, res) => {
+  const [notes] = await db.query(
+    `
     SELECT id, x, y, width, height, content
     FROM notes
+    WHERE user_id = ?
     ORDER BY created_at ASC
-  `);
+  `,
+    [req.user.uid],
+  );
 
   res.json(notes.map(sanitizeNote));
 });
@@ -128,16 +149,16 @@ app.post("/api/notes", async (req, res) => {
 
   await db.query(
     `
-    INSERT INTO notes (id, x, y, width, height, content)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO notes (id, user_id, x, y, width, height, content)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     `,
-    [id, x, y, width, height, content],
+    [id, req.user.uid, x, y, width, height, content],
   );
 
   res.status(201).json({ id, x, y, width, height, content });
 });
 
-app.put("/api/notes/:id", async (req, res) => {
+app.put("/api/notes/:id", authenticate, async (req, res) => {
   const { id } = req.params;
   const { x, y, width, height, content } = sanitizeNote(req.body);
 
@@ -146,17 +167,21 @@ app.put("/api/notes/:id", async (req, res) => {
     UPDATE notes
     SET x=?, y=?, width=?, height=?, content=?
     WHERE id=?
+    AND user_id = ?
     `,
-    [x, y, width, height, content, id],
+    [x, y, width, height, content, id, req.user.uid],
   );
 
   res.json({ success: true });
 });
 
-app.delete("/api/notes/:id", async (req, res) => {
+app.delete("/api/notes/:id", authenticate, async (req, res) => {
   const { id } = req.params;
 
-  await db.query("DELETE FROM notes WHERE id=?", [id]);
+  await db.query("DELETE FROM notes WHERE id=? AND user_id = ?", [
+    id,
+    req.user.uid,
+  ]);
 
   res.json({ success: true });
 });
